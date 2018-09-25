@@ -14,10 +14,6 @@ class FeedReader(object):
     }
 
     def __init__(self, url):
-        """ FeedReader
-            ------------------
-            @url string
-        """
         self._url = url
 
         self._load_items()
@@ -30,10 +26,6 @@ class FeedReader(object):
 
     @property
     def items(self):
-        """ items
-            --------------
-            @return list
-        """
         return self._feeds['items']
 
     @property
@@ -45,20 +37,10 @@ class FeedReader(object):
         return self._feeds['meta_data']
 
     def _load_items(self):
-        """ _load_items
-            ----------------------
-            @return
-        """
-
         feeds_page = self._fetch_feeds_page()
-        r = self._parse_feeds(feeds_page)
-        # print(r)
+        return self._parse_feeds(feeds_page)
 
     def _fetch_feeds_page(self):
-        """ _fetch_feeds_page
-            ---------------------
-            @return string
-        """
         # It is not necessary to put user agent in header
             # but let server feel this request is comming from known browser (Chrome here)
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'}
@@ -72,11 +54,6 @@ class FeedReader(object):
         return response.content
 
     def _parse_feeds(self, page):
-        """ _parse_feeds
-            -------------------
-            @page string xml
-            @return json
-        """
 
         # Let instantiate the xml parser
         selector = ET.fromstring(page)
