@@ -8,7 +8,10 @@ class HTTPResponseError(Exception):
 
 class FeedReader(object):
     _url = ''
-    _items = []
+    _feeds = {
+        'meta_data': {},
+        'items': [],
+    }
 
     def __init__(self, url):
         """ FeedReader
@@ -19,13 +22,27 @@ class FeedReader(object):
 
         self._load_items()
 
+    def __getattr__(self, attr):
+        try:
+            return self._feeds[attr]
+        except KeyError:
+            return AttributeError(f'Object has no attribute called {attr}')
+
     @property
     def items(self):
         """ items
             --------------
             @return list
         """
-        return self._items
+        return self._feeds['items']
+
+    @property
+    def feeds(self):
+        return self._feeds
+
+    @property
+    def meta(self):
+        return self._feeds['meta_data']
 
     def _load_items(self):
         """ _load_items
@@ -61,12 +78,6 @@ class FeedReader(object):
             @return json
         """
 
-        # Basic promised structre of feeds
-        parsed_feeds = {
-            'meta_data': {},
-            'items': [],
-        }
-
         # Let instantiate the xml parser
         selector = ET.fromstring(page)
 
@@ -83,18 +94,27 @@ class FeedReader(object):
                 items = child.getchildren()
 
                 for item in items:
+                    tag = item.tag
+
+                    if tag.endswith('thumbnail'):
+                        tag = 'thumbnail'
+
                     item = {
                         'text': item.text,
                         'attributes': item.attrib,
-                        'tag': item.tag,
+                        'tag': tag,
                     }
 
-                    parsed_feeds['items'].append(item)
+                    self._feeds['items'].append(item)
             else:
                 # Assuming that rest of the tag would be meta data
                 meta = child.tag
 
                 if meta:
-                    parsed_feeds['meta_data'][meta] = child.text
+                    # Get text of meta tags Except image
+                        # Get url of image
+                    self._feeds['meta_data'][meta] = child.find('./url').text \
+                                                        if meta == 'image' \
+                                                        else child.text
 
-        return parsed_feeds
+        return self._feeds
