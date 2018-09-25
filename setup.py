@@ -10,6 +10,4 @@ setup(
     author='Yash Pokar',
     author_email='hello@yashpokar.com',
     packages=find_packages(),
-    test_suite='nose.collector',
-    tests_require=['nose'],
 )
