@@ -10,10 +10,11 @@ def index():
 @app.route('/rss_feed/read')
 def read():
     url = request.args.get('url')
+    headers = {'access-control-allow-origin': '*'}
 
     if not url:
-        return jsonify({'message': 'Please enter rss url.'}), 403
+        return jsonify({'message': 'Please enter rss url.'}), 403, headers
 
     reader = FeedReader(url)
 
-    return jsonify({'message': '', 'data': reader.feeds})
+    return jsonify({'message': '', 'data': reader.feeds}), 200, headers

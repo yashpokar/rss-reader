@@ -67,9 +67,10 @@ class FeedReader(object):
 
             # Collect all the feeds (items)
             if child.tag == 'item':
-                items = child.getchildren()
+                feed_items = child.getchildren()
+                items = []
 
-                for item in items:
+                for item in feed_items:
                     tag = item.tag
 
                     if tag.endswith('thumbnail'):
@@ -81,7 +82,9 @@ class FeedReader(object):
                         'tag': tag,
                     }
 
-                    self._feeds['items'].append(item)
+                    items.append(item)
+                self._feeds['items'].append(items)
+
             else:
                 # Assuming that rest of the tag would be meta data
                 meta = child.tag
