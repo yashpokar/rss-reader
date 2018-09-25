@@ -4,14 +4,13 @@ from .exceptions import HTTPResponseError
 
 
 class FeedReader(object):
-    _url = ''
-    _feeds = {
-        'meta': {},
-        'items': [],
-    }
 
     def __init__(self, url):
         self._url = url
+        self._feeds = {
+            'meta': {},
+            'items': [],
+        }
 
         self._load_items()
 
