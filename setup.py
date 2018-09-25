@@ -6,6 +6,7 @@ setup(
     description='A High level rss feed reader',
     install_requires=[
         'requests',
+        'Flask',
     ],
     author='Yash Pokar',
     author_email='hello@yashpokar.com',
