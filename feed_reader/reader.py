@@ -6,7 +6,7 @@ from .exceptions import HTTPResponseError
 class FeedReader(object):
     _url = ''
     _feeds = {
-        'meta_data': {},
+        'meta': {},
         'items': [],
     }
 
@@ -31,7 +31,7 @@ class FeedReader(object):
 
     @property
     def meta(self):
-        return self._feeds['meta_data']
+        return self._feeds['meta']
 
     def _load_items(self):
         feeds_page = self._fetch_feeds_page()
@@ -89,7 +89,7 @@ class FeedReader(object):
                 if meta:
                     # Get text of meta tags Except image
                         # Get url of image
-                    self._feeds['meta_data'][meta] = child.find('./url').text \
+                    self._feeds['meta'][meta] = child.find('./url').text \
                         if meta == 'image' \
                         else child.text
 
