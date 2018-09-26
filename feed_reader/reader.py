@@ -78,10 +78,9 @@ class FeedReader(object):
                     item = {
                         'text': item.text,
                         'attributes': item.attrib,
-                        'tag': tag,
                     }
 
-                    items.append(item)
+                    items.append({tag: item})
                 self._feeds['items'].append(items)
 
             else:
